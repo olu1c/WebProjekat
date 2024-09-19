@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "Prijava";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prijava</title>
+    <style>
+        body {
+            background-color: #5c9bb8;
+            background-image: url("https://www.transparenttextures.com/patterns/arches.png");
+            font-family: Arial, sans-serif;
+            
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+
+        .container {
+            background-color: #ffffff; 
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4b0082; 
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4b0082; 
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #4169e1; 
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            input[type="submit"]:hover {
+                background-color: #364fc7; 
+            }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" action="/Home/Prijava">
+        <label for="korisnickoIme">Korisnicko ime:</label>
+        <input type="text" id="korisnickoIme" name="korisnickoIme"><br><br>
+
+        <label for="lozinka">Lozinka:</label>
+        <input type="password" id="lozinka" name="lozinka"><br><br>
+
+        <input type="submit" value="Prijava">
+    </form>
+
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <p style="color: red;">@ViewBag.ErrorMessage</p>
+    }
+
+</body>
+</html>

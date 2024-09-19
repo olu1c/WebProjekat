@@ -1,0 +1,246 @@
+﻿@model List<Projekat.Models.Pacijent>
+@{
+    ViewBag.Title = "Admin";
+}
+
+<!DOCTYPE html>
+<html>
+<body>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>@ViewBag.Title</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #5c9bb8;
+                background-image: url("https://www.transparenttextures.com/patterns/arches.png");
+                color: #333;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 20px;
+            }
+
+            .container {
+                background-color: #ffffff; 
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                width: 80%;
+                margin-bottom: 20px;
+            }
+
+            h1, h2 {
+                text-align: center;
+                color: #4b0082; 
+            }
+
+            .forma {
+                margin-bottom: 20px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 8px;
+                color: #4b0082; 
+            }
+
+            .input {
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                box-sizing: border-box;
+            }
+
+            .dodavanje {
+                width: 100%;
+                padding: 10px;
+                background-color: #4169e1; 
+                border: none;
+                border-radius: 5px;
+                color: white;
+                font-weight: bold;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+                .dodavanje:hover {
+                    background-color: #364fc7; 
+                }
+
+            .error-message {
+                color: red;
+                text-align: center;
+                margin-top: 10px;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            th, td {
+                border: 1px solid #ccc;
+                padding: 10px;
+                text-align: left;
+            }
+
+            th {
+                background-color: #4b0082; 
+                color: white;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f2f2f2; 
+            }
+
+            a {
+                color: #4169e1; 
+                text-decoration: none;
+            }
+
+            a:hover {
+                    text-decoration: underline;
+            }
+
+
+            .logout-button {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background-color: #4169e1;
+                color: white;
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+
+                .logout-button:hover {
+                    background-color: #e03e00;
+                }
+        </style>
+        </style>
+    </head>
+
+    <form method="post" action="/Home/Index" class="logout-form">
+        <button type="submit" class="logout-button">Logout</button>
+    </form>
+
+    <form method="post" action="/Administrator/KreirajPacijenta" class="forma">
+        <h1>Kreiranje novog pacijenta</h1>
+
+        <label for="korisnickoIme">Korisnicko ime(jedinstveno): </label>
+        <input type="text" id="korisnickoIme" name="korisnickoIme" class="input" required />
+        <br />
+        <label for="jmbg">JMBG(jedinstveni): </label>
+        <input type="text" id="jmbg" name="jmbg" class="input" required />
+        <br />
+        <br />
+        <label for="ime">Ime: </label>
+        <input type="text" id="ime" name="ime" class="input" required />
+        <br />
+        <br />
+        <label for="prezime">Prezime </label>
+        <input type="text" id="prezime" name="prezime" class="input" required />
+        <br />
+        <br />
+        <label for="email">Email(jedinstven):  </label>
+        <input type="text" id="email" name="email" class="input" required />
+        <br />
+        <br />
+        <label for="sifra">Sifra:  </label>
+        <input type="password" id="sifra" name="sifra" class="input" required />
+        <br />
+        <br />
+        <label for="datumRodjenja">Datum rodjenja: </label>
+        <input type="date" id="datumRodjenja" name="datumRodjenja" class="input" required />
+        <br />
+        <input type="submit" class="dodavanje" value="Kreirajte pacijenta" />
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <p style="color: red;">@ViewBag.ErrorMessage</p>
+        }
+
+    </form>
+
+    <form method="post" action="/Administrator/Sortiranje" class="forma">
+        <label for="parametarSortiranja">Odaberite parametar sortiranja:</label>
+        <select id="parametarSortiranja" name="parametarSortiranja">
+            <option value="KorisnickoIme">Korisnicko ime</option>
+            <option value="Jmbg">JMBG</option>
+            <option value="Ime">Ime</option>
+            <option value="Prezime">Prezime</option>
+            <option value="DatumRodjenja">Datum rodjenja</option>
+            <option value="Email">Email</option>
+        </select>
+
+        <label for="redosledSortiranja">Odaberite redosled sortiranja:</label>
+        <select id="redosledSortiranja" name="redosledSortiranja">
+            <option value="asc">Rastuce</option>
+            <option value="desc">Opadajuce</option>
+        </select>
+
+        <input type="submit" value="Sortiraj" />
+        <button type="button" onclick="window.location.href='/Administrator/ResetovanjeSortiranja';">Resetuj sortiranje</button>
+    </form>
+
+    <form method="post" action="/Administrator/Filtriranje" class="forma">
+        <label for="parametar">Izaberite parametar za filtriranje:</label>
+        <select id="parametar" name="parametar">
+            <option value="Ime">Ime</option>
+            <option value="Prezime">Prezime</option>
+            <option value="Jmbg">JMBG</option>
+            <option value="DatumRodjenja">Datum rodjenja</option>
+            <option value="Email">Email</option>
+        </select>
+        <br />
+        <label for="vrednost">Unesite vrednost za filtriranje:</label>
+        <input type="text" id="vrednost" name="vrednost" required />
+        <br />
+        <input type="submit" value="Filtriraj" />
+        <button type="button" onclick="window.location.href='/Administrator/Index';">Resetuj filter</button>
+    </form>
+
+    <h2>Lista pacijenata</h2>
+
+    <table>
+        <tr>
+            <th>Korisnicko ime</th>
+            <th>JMBG</th>
+            <th>Sifra</th>
+            <th>Ime</th>
+            <th>Prezime</th>
+            <th>Datum rodjenja</th>
+            <th>Email</th>
+            <th colspan="2">Akcije</th>
+        </tr>
+        @foreach (var pacijent in Model)
+        {
+            if (pacijent.IsDeleted)
+            { continue; }
+
+            <tr>
+                <td>@pacijent.KorisnickoIme</td>
+                <td>@pacijent.Jmbg</td>
+                <td>@pacijent.Sifra</td>
+                <td>@pacijent.Ime</td>
+                <td>@pacijent.Prezime</td>
+                <td>@pacijent.DatumRodjenja.ToString("dd/MM/yyyy")</td>
+                <td>@pacijent.ElektronskaPosta</td>
+                <td>
+                    <a href="@Url.Action("IzmeniPacijenta", "Administrator", new { id = pacijent.Id })">Izmeni</a>
+
+                    <a href="@Url.Action("ObrisiPacijenta", "Administrator", new { id = pacijent.Id })">Obrisi</a>
+                </td>
+            </tr>
+        }
+    </table>
+
+
+</body>
+</html>
+

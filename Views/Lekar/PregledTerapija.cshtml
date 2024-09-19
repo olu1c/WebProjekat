@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Projekat.Models.Termin>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Pregled terapija</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #4b0082;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" action="/Home/Index" class="logout-form">
+        <button type="submit" class="logout-button">Logout</button>
+    </form>
+
+    <div class="container">
+        <h2>Pregled terapija</h2>
+
+        <table>
+            <tr>
+                <th>Datum</th>
+                <th>Dan</th>
+                <th>Lekar</th>
+                <th>Terapija</th>
+            </tr>
+            @foreach (var termin in Model)
+            {
+                <tr>
+                    <td>@termin.DatumZakazanogTermina</td>
+                    <td>@termin.DanTermina</td>
+                    <td>@termin.Lekar.KorisnickoIme</td>
+                    <td>@termin.OpisTerapije</td>
+                </tr>
+            }
+        </table>
+    </div>
+</body>
+</html>

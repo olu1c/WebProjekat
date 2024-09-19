@@ -1,0 +1,223 @@
+﻿@model List<Projekat.Models.Termin>
+@using Projekat.Models
+@using Projekat.Helperi
+@{
+    ViewBag.Title = "Pacijent";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #5c9bb8;
+            background-image: url("https://www.transparenttextures.com/patterns/arches.png");
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            color: #4a4a99;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section, .table-section {
+            margin-bottom: 30px;
+        }
+
+            .form-section label, .form-section input, .form-section select {
+                display: block;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+                .form-section input[type="submit"] {
+                    background-color: #4a4a99;
+                    color: white;
+                    border: none;
+                    padding: 10px;
+                    cursor: pointer;
+                }
+
+                    .form-section input[type="submit"]:hover {
+                        background-color: #37377d;
+                    }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4a4a99;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #4169e1;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+            .logout-button:hover {
+                background-color: #e03e00;
+            }
+    </style>
+</head>
+<body>
+    <body>
+        <form method="post" action="/Home/Index" class="logout-form">
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+
+        <div class="container">
+            <h2>Prikaz svih termina</h2>
+
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div style="color: red; font-weight: bold;">
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+
+            <form method="post" action="/Pacijent/ZakaziTermin">
+                <table>
+                    <tr>
+                        <th>Datum i vreme</th>
+                        <th>Dan</th>
+                        <th>Ime lekara</th>
+                        <th>Zakazite</th>
+                    </tr>
+                    @foreach (var termin in Model)
+                    {
+                        if (termin.StatusTermina != StatusTermina.Slobodan)
+                        {
+                            continue;
+                        }
+
+                        bool mozeZakazati = true;
+                        var pacijentId = ((PomocnaSesija)Session["auth"]).Id;
+
+                        // Provera da li postoji termin u isto vreme za trenutnog pacijenta
+                        foreach (var zauzetTermin in Model)
+                        {
+                            if (zauzetTermin.StatusTermina == StatusTermina.Zauzet &&
+                                zauzetTermin.DatumZakazanogTermina == termin.DatumZakazanogTermina &&
+                                zauzetTermin.Pacijent != null && zauzetTermin.Pacijent.Id == pacijentId)
+                            {
+                                mozeZakazati = false;
+                                break;
+                            }
+                        }
+
+
+                        <tr>
+                            <td>@termin.DatumZakazanogTermina</td>
+                            <td>@termin.DanTermina</td>
+                            <td>@termin.Lekar.KorisnickoIme</td>
+                            <td>
+                                @if (mozeZakazati)
+                                {
+                                    <button type="submit" name="terminId" value="@termin.Id">Zakazite</button>
+                                }
+                                else
+                                {
+                                    <span style="color: red;">Termin nije dostupan</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </form>
+
+            <form method="post" action="/Pacijent/Sortiranje" class="forma">
+                <label for="parametarSortiranja">Odaberite parametar sortiranja:</label>
+                <select id="parametarSortiranja" name="parametarSortiranja">
+                    <option value="Lekar">Lekar</option>
+                    <option value="Datum">Datum i vreme</option>
+                </select>
+                <br />
+                <label for="redosledSortiranja">Odaberite redosled sortiranja:</label>
+                <select id="redosledSortiranja" name="redosledSortiranja">
+                    <option value="asc">Rastuce</option>
+                    <option value="desc">Opadajuce</option>
+                </select>
+                <br />
+                <input type="submit" value="Sortiraj" />
+                <button type="button" onclick="window.location.href='/Pacijent/Index';">Resetuj sortiranje</button>
+            </form>
+
+            <form method="post" action="/Pacijent/Filtriranje" class="forma">
+                <label for="parametar">Izaberite parametar za filtriranje:</label>
+                <select id="parametar" name="parametar">
+                    <option value="Lekar">Lekar</option>
+                    <option value="Datum">Datum i vreme</option>
+                </select>
+                <br />
+                <label for="vrednost">Unesite vrednost za filtriranje:</label>
+                <input type="text" id="vrednost" name="vrednost" required />
+                <br />
+                <input type="submit" value="Filtriraj" />
+                <button type="button" onclick="window.location.href='/Pacijent/Index';">Resetuj filter</button>
+            </form>
+
+            <h2>Terapije</h2>
+            <table>
+                <tr>
+                    <th>Datum</th>
+                    <th>Dan</th>
+                    <th>Ime lekara</th>
+                    <th>Terapija</th>
+                </tr>
+                @foreach (var termin in Model)
+                {
+                    if (termin.StatusTermina == StatusTermina.Slobodan || termin.Pacijent.Id != ((PomocnaSesija)Session["auth"]).Id)
+                    {
+                        continue;
+                    }
+                    <tr>
+                        <td>@termin.DatumZakazanogTermina</td>
+                        <td>@termin.DanTermina</td>
+                        <td>@termin.Lekar.KorisnickoIme</td>
+                        <td>@termin.OpisTerapije</td>
+                    </tr>
+                }
+            </table>
+
+
+
+
+        </div>
+    </body>
+
+</body>
+</html>
+

@@ -1,0 +1,109 @@
+﻿@model Projekat.Models.Pacijent
+@{
+    ViewBag.Title = "Izmena pacijenta";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff; 
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff; 
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4b0082; 
+        }
+
+        .forma {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4b0082; 
+        }
+
+        .input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .sacuvaj {
+            width: 100%;
+            padding: 10px;
+            background-color: #4169e1;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .sacuvaj:hover {
+                background-color: #364fc7; 
+            }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Izmena podataka pacijenta</h1>
+
+    <form method="post" action="@Url.Action("SacuvajIzmenePacijenta", "Administrator")" class="forma">
+        @Html.HiddenFor(model => model.Id)
+
+        <label for="ime">Ime: </label>
+        <input type="text" id="ime" name="Ime" value="@Model.Ime" class="input" required />
+        <br />
+        <br />
+        <label for="prezime">Prezime: </label>
+        <input type="text" id="prezime" name="Prezime" value="@Model.Prezime" class="input" required />
+        <br />
+        <br />
+        <label for="email">Email: </label>
+        <input type="text" id="email" name="ElektronskaPosta" value="@Model.ElektronskaPosta" class="input" required />
+        <br />
+        <br />
+        <label for="datumRodjenja">Datum rodjenja: </label>
+        <input type="date" id="datumRodjenja" name="DatumRodjenja" value="@Model.DatumRodjenja.ToString("yyyy-MM-dd")" class="input" required />
+        <br />
+        <br />
+        <input type="submit" class="sacuvaj" value="Sacuvaj izmene" />
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <p style="color: red;">@ViewBag.ErrorMessage</p>
+        }
+    </form>
+
+</body>
+</html>

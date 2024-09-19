@@ -1,0 +1,5 @@
+pacijent1,1234,sifra1,pacijent1,pacijent1,5/26/2024 12:00:00 AM,pacijent1@gmail.com,1,False
+pacijent2,9876,sifra2,pacijent2,pacijent2,5/26/2024 12:00:00 AM,pacijent2@gmail.com,2,False
+pacijent3,44566,sifra3,pacijent3,pacijent3,5/27/2024 12:00:00 AM,pacijent3@gmail.com,3,True
+pacijent3,12321,sifra3,pacijent3,pacijent3,5/26/2024 12:00:00 AM,pacijent3@gmail.com,4,False
+pacijentZaIzmenu,1009,sifra5,izmenjenoIme,izmenjeno,4/21/2024 12:00:00 AM,izmena@gmail.com,5,False
